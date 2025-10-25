@@ -1,0 +1,114 @@
+# Train/val/test sets as 1) dir: path/to/imgs, 2) file: path/to/imgs.txt, or 3) list: [path/to/imgs1, path/to/imgs2, ..]
+path: D:/study/Textile_defects/ultraytics/ultralytics-main/datasets/split  # dataset root dir
+train: images/train  # train images (relative to 'path') 4 images
+val: images/val  # val images (relative to 'path') 4 images
+test: images/test # test images (optional)
+
+
+nc: 8
+
+
+# Classes
+names:
+  0: duanjing
+  1: shuangjing
+  2: jindangzi
+  3: quyu
+  4: songdangzi
+  5: duanwei
+  6: daiwei
+  7: Background
+
+weights: [1.0, 1.0, 1.0, 5.0, 1.0, 10.0, 10.0, 1.0]  # quyu类别权重设为5
+
+# 修改data.yaml的增强配置
+#augmentation:
+#  mosaic: 0.5  # 降低mosaic概率
+#  mixup: 0.3    # 添加mixup增强
+#  hsv_h: 0.02   # 减少色调变化
+#  hsv_s: 0.6    # 增加饱和度扰动
+#  degrees: 5     # 减小旋转角度
+
+## 数据层面
+#data:
+#  oversample_ratio:
+#    duanwei: 5.0  # 过采样5倍
+#    daiwei: 3.0
+#
+## 模型层面
+#loss:
+#  cls_pw: 1.5  # 分类损失权重
+#  obj_pw: 1.2  # 置信度权重
+
+# 特殊数据增强
+#augmentation:
+#  - name: RandomStripe
+#    width_range: [1, 5]  # 模拟细长目标
+#    prob: 0.7
+
+#hyp:
+#    scales: [0.67, 0.83, 1.0, 1.17]  # 多尺度系数
+#    min_wh: 96      # 最小高度保持原尺寸
+#    max_wh: 1536    # 最大宽度限制
+#
+## segment.yaml 新增数据增强策略
+#augmentation:
+#  - name: RandomMicroDefects  # 小目标增强
+#    prob: 0.8
+#    min_size: 2
+#    max_size: 10
+#    density: 0.1
+#
+#  - name: ElasticStretch      # 纵向弹性形变
+#    direction: 'vertical'
+#    alpha: 50
+#    sigma: 10
+#    prob: 0.6
+#
+#  - name: StripesCutmix       # 横向条状混合
+#    width_range: [10, 100]
+#    prob: 0.4
+
+  # 基础增强
+#  hsv_h: 0.015
+#  hsv_s: 0.7
+#  hsv_v: 0.4
+#  degrees: 15.0
+#  translate: 0.2
+#  scale: 0.9
+#  shear: 0.1
+#  perspective: 0.0005
+
+#  # 方向敏感增强
+#  horizontal_flip: 0.7  # 横向翻转概率
+#  vertical_flip: 0.3    # 纵向翻转概率
+#  random_rotate:
+#    probability: 0.5
+#    angle_range: [-30, 30]
+
+  # 小目标增强
+#  small_object:
+#    copy_paste: True     # 小目标复制粘贴
+#    min_area: 0.001      # 面积阈值
+#    max_count: 3         # 最大复制次数
+#
+#  # 数据增强配置增加小目标增强
+#  augmentations:
+#    mosaic: 0.5
+#    mixup: 0.2
+#    copy_paste: 0.5  # 小目标复制粘贴
+
+# data.yaml 配置
+#augmentation:
+#  - name: HorizontalStretch  # 横向拉伸增强
+#    prob: 0.5
+#    scale: [0.8, 1.2]  # 横向随机伸缩
+#
+#  - name: VerticalCompress   # 纵向压缩
+#    prob: 0.3
+#    scale: [0.7, 1.0]
+#
+#  - name: LineArtifact       # 模拟线状瑕疵
+#    prob: 0.6
+#    max_lines: 3
+#    thickness: [1, 3]

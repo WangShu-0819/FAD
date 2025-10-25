@@ -1,0 +1,12 @@
+names:
+ - duanjing
+ - shuangjing
+ - jindangzi
+ - quyu
+ - songdangzi
+ - duanwei
+ - daiwei
+nc: 7
+#test: VOCdevkitalldetect/test/images
+train: D:/study/Textile_defects/ultralytics-yolov8/ultralytics-main/datasets/VOCdevkit_cut/train/images
+val: D:/study/Textile_defects/ultralytics-yolov8/ultralytics-main/datasets/VOCdevkit_cut/val/images
