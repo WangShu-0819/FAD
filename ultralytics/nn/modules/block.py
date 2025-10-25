@@ -39,6 +39,7 @@ __all__ = (
     "Silence",
     "MSECSP",
     "LSKA",
+    "DSKA",
     "MorphologicalPreprocess",
 )
 
@@ -791,59 +792,59 @@ class DynamicStripPooling(nn.Module):
         return x + fused
 
 
-# class LSKA(nn.Module):
-#     def __init__(self, dim):
-#         super().__init__()
-#
-#         # 使用可分离卷积来增加感受野
-#         self.conv0h = nn.Conv2d(dim, dim, kernel_size=(1, 3), stride=(1, 1), padding=(0, 1), groups=dim)
-#         self.conv0v = nn.Conv2d(dim, dim, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0), groups=dim)
-#
-#         # # 增加水平方向的感受野，减小垂直方向的核大小
-#         # self.conv_spatial_h = nn.Conv2d(dim, dim, kernel_size=(1, 15), stride=(1, 1), padding=(0, 7), groups=dim,
-#         #                                 dilation=1)
-#         # self.conv_spatial_v = nn.Conv2d(dim, dim, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0), groups=dim,
-#         #                                 dilation=1)
-#
-#         # 增加水平方向的感受野，减小垂直方向的核大小
-#         self.conv_spatial_h = nn.Conv2d(dim, dim, kernel_size=(1, 31), stride=(1, 1), padding=(0, 15), groups=dim,
-#                                         dilation=1)
-#         self.conv_spatial_v = nn.Conv2d(dim, dim, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0), groups=dim,
-#                                         dilation=1)
-#
-#         self.conv1 = nn.Conv2d(dim, dim, 1)
-#         self.global_avg_pool = nn.AdaptiveAvgPool2d((1, 1))
-#
-#         # # 显著增加水平方向的感受野
-#         # self.conv_spatial_h = nn.Conv2d(dim, dim, kernel_size=(1, 63), stride=(1, 1), padding=(0, 31), groups=dim,
-#         #                                 dilation=1)
-#         # self.conv_spatial_v = nn.Conv2d(dim, dim, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0), groups=dim,
-#         #                                 dilation=1)
-#         #
-#         # self.conv1 = nn.Conv2d(dim, dim, kernel_size=1)
-#         # self.global_avg_pool = nn.AdaptiveAvgPool2d((1, 1))
-#
-#
-#     def forward(self, x):
-#         u = x.clone()
-#
-#         # 水平和垂直方向的注意力
-#         attn_h = self.conv0h(x)
-#         attn_v = self.conv0v(x)
-#         attn = attn_h + attn_v
-#
-#         # 增加感受野
-#         attn = self.conv_spatial_h(attn)
-#         attn = self.conv_spatial_v(attn)
-#
-#         # 全局平均池化
-#         attn = self.global_avg_pool(attn)
-#         attn = F.relu(attn)
-#         attn = attn.expand_as(u)
-#
-#         # 最后的注意力卷积
-#         attn = self.conv1(attn)
-#         return u * attn
+class LSKA(nn.Module):
+    def __init__(self, dim):
+        super().__init__()
+
+        # 使用可分离卷积来增加感受野
+        self.conv0h = nn.Conv2d(dim, dim, kernel_size=(1, 3), stride=(1, 1), padding=(0, 1), groups=dim)
+        self.conv0v = nn.Conv2d(dim, dim, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0), groups=dim)
+
+        # # 增加水平方向的感受野，减小垂直方向的核大小
+        # self.conv_spatial_h = nn.Conv2d(dim, dim, kernel_size=(1, 15), stride=(1, 1), padding=(0, 7), groups=dim,
+        #                                 dilation=1)
+        # self.conv_spatial_v = nn.Conv2d(dim, dim, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0), groups=dim,
+        #                                 dilation=1)
+
+        # 增加水平方向的感受野，减小垂直方向的核大小
+        self.conv_spatial_h = nn.Conv2d(dim, dim, kernel_size=(1, 31), stride=(1, 1), padding=(0, 15), groups=dim,
+                                        dilation=1)
+        self.conv_spatial_v = nn.Conv2d(dim, dim, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0), groups=dim,
+                                        dilation=1)
+
+        self.conv1 = nn.Conv2d(dim, dim, 1)
+        self.global_avg_pool = nn.AdaptiveAvgPool2d((1, 1))
+
+        # # 显著增加水平方向的感受野
+        # self.conv_spatial_h = nn.Conv2d(dim, dim, kernel_size=(1, 63), stride=(1, 1), padding=(0, 31), groups=dim,
+        #                                 dilation=1)
+        # self.conv_spatial_v = nn.Conv2d(dim, dim, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0), groups=dim,
+        #                                 dilation=1)
+        #
+        # self.conv1 = nn.Conv2d(dim, dim, kernel_size=1)
+        # self.global_avg_pool = nn.AdaptiveAvgPool2d((1, 1))
+
+
+    def forward(self, x):
+        u = x.clone()
+
+        # 水平和垂直方向的注意力
+        attn_h = self.conv0h(x)
+        attn_v = self.conv0v(x)
+        attn = attn_h + attn_v
+
+        # 增加感受野
+        attn = self.conv_spatial_h(attn)
+        attn = self.conv_spatial_v(attn)
+
+        # 全局平均池化
+        attn = self.global_avg_pool(attn)
+        attn = F.relu(attn)
+        attn = attn.expand_as(u)
+
+        # 最后的注意力卷积
+        attn = self.conv1(attn)
+        return u * attn
 
 class CSKA(nn.Module):
     def __init__(self, dim):
@@ -863,7 +864,7 @@ class CSKA(nn.Module):
         return x
 
 
-class LSKA(nn.Module):
+class DSKA(nn.Module):
     def __init__(self, dim):
         super().__init__()
         # 极宽水平卷积核 + 动态膨胀系数
@@ -911,7 +912,7 @@ class MSECSP(nn.Module):
         self.cv6 = Conv(c_, c_, 3, 1)
         self.cv7 = Conv(2 * c_, c2, 1, 1)
         self.dsp = DynamicStripPooling(c_)
-        self.lska = LSKA(c_ * 2)
+        self.dska = DSKA(c_ * 2)
         # self.dska = CSKA(c_ * 2)
         self.residual = nn.Sequential(
             *[Conv(c_, c_, 3, 1) for _ in range(n)]
@@ -924,7 +925,7 @@ class MSECSP(nn.Module):
         x5 = self.dsp(x1)
         y1 = self.cv6(self.cv5(torch.cat((x1, x2, x3, x5), 1)))
         y2 = self.cv2(x)
-        return self.cv7(self.lska(torch.cat((y1, y2), dim=1)))
+        return self.cv7(self.dska(torch.cat((y1, y2), dim=1)))
 
 # class MorphologicalPreprocess(nn.Module):
 #     def __init__(self, in_channels, out_channels, target_length=960):
@@ -1055,10 +1056,6 @@ class MorphologicalPreprocess(nn.Module):
         dummy_input = torch.zeros(1, in_channels, 3, 3)
         features = self.morphological_operations(dummy_input)
         return features.shape[1] // in_channels
-    # def calculate_morphological_channels(self, in_channels):
-    #     dummy_input = torch.zeros(1, in_channels, 3, 3)
-    #     features = self.morphological_operations(dummy_input)
-    #     return features.shape[1]
 
     def morphological_operations(self, x):
         # 输入形状: [B, 3, H, W]
@@ -1302,72 +1299,6 @@ class LightMorphologicalPreprocess(nn.Module):
         # 4. 最终通道映射输出
         return self.fusion_conv(fused)
 
-# class LightMorphologicalPreprocess(nn.Module):
-#     def __init__(self, in_channels=3, out_channels=16, target_length=960):
-#         super().__init__()
-#         self.target_length = target_length
-#         self.in_ch = in_channels
-#
-#         # 1. 动态计算形态学通道数
-#         self.morph_ch = self._calc_morph_ch(in_channels)
-#         # 2. 形态学特征融合：1×1替代3×3
-#         self.morph_conv = nn.Conv2d(in_channels * self.morph_ch, in_channels, kernel_size=1, bias=False)
-#
-#         # 3. 通道注意力：保留“全局池化→压缩→激活→恢复”原理，代码更紧凑
-#         mid_ch = max(in_channels // 3, 1)  # 维持原压缩比，避免0通道
-#         self.attn = nn.Sequential(
-#             nn.AdaptiveAvgPool2d(1),
-#             nn.Conv2d(in_channels, mid_ch, 1, bias=False),
-#             nn.ReLU(),
-#             nn.Conv2d(mid_ch, in_channels, 1, bias=False),
-#             nn.Sigmoid()
-#         )
-#
-#         # 4. 最终融合卷积：保留“Conv→BN→ReLU”原理，1×1替代3×3（降计算量89%）
-#         self.fusion_conv = nn.Sequential(
-#             nn.Conv2d(in_channels, out_channels, kernel_size=1, bias=False),
-#             nn.BatchNorm2d(out_channels),
-#             nn.ReLU()
-#         )
-#
-#     def _calc_morph_ch(self, in_channels):
-#         """封装动态通道计算，替代原calculate_morphological_channels"""
-#         dummy = torch.zeros(1, in_channels, 3, 3)
-#         return self._morph_ops(dummy).shape[1] // in_channels
-#
-#     def _morph_branch(self, x, kernel, padding):
-#         """封装横向/纵向形态学逻辑，消除重复代码"""
-#         # 原步骤：腐蚀→开运算→顶帽；膨胀→闭运算→黑帽；融合为1个分支特征
-#         opening = F.max_pool2d(-F.max_pool2d(-x, kernel, stride=1, padding=padding), kernel, stride=1, padding=padding)
-#         closing = -F.max_pool2d(-F.max_pool2d(x, kernel, stride=1, padding=padding), kernel, stride=1, padding=padding)
-#         return (x - opening + closing - x) / 2  # 等价原(h_tophat + h_blackhat)/2
-#
-#     def _morph_ops(self, x):
-#         """封装所有形态学操作，替代原morphological_operations"""
-#         # 1. 亮度标准化
-#         x = (x - x.min()) / (x.max() - x.min() + 1e-6)
-#
-#         # 2. 三分支特征提取
-#         h_feat = self._morph_branch(x, kernel=(1, 5), padding=(0, 2))  # 横向分支（3通道）
-#         v_feat = self._morph_branch(x, kernel=(5, 1), padding=(2, 0))  # 纵向分支（3通道）
-#         # 点状分支：原open_s - open_m
-#         open_s = F.avg_pool2d(F.max_pool2d(x, (3, 3), 1, 1), (3, 3), 1, 1)
-#         open_m = F.avg_pool2d(F.max_pool2d(x, (5, 5), 1, 2), (5, 5), 1, 2)
-#         dot_feat = open_s - open_m  # 点状分支（3通道）
-#
-#         # 3. 融合为9通道
-#         return torch.cat([h_feat, v_feat, dot_feat], dim=1)
-#
-#     def forward(self, x):
-#         """前向传播：步骤不变，代码更简洁，原原理完全一致"""
-#         # 1. 形态学特征提取
-#         morph_feat = self.morph_conv(self._morph_ops(x))
-#         # 2. 注意力加权
-#         attn_w = self.attn(morph_feat)
-#         # 3. 残差融合
-#         fused = x + morph_feat * attn_w
-#         # 4. 最终输出
-#         return self.fusion_conv(fused)
 
 
 class SPPFCSPC(nn.Module):
