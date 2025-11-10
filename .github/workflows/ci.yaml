@@ -47,7 +47,7 @@ jobs:
     runs-on: macos-14
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -67,7 +67,7 @@ jobs:
         os: [ubuntu-latest]
         python-version: ["3.11"]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
@@ -122,7 +122,7 @@ jobs:
         python-version: ["3.11"]
         model: [yolov8n]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
@@ -182,7 +182,7 @@ jobs:
             python-version: "3.8" # torch 1.8.0 requires python >=3.6, <=3.8
             torch: "1.8.0" # min torch version CI https://pypi.org/project/torchvision/
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
@@ -224,7 +224,7 @@ jobs:
     timeout-minutes: 60
     runs-on: gpu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install requirements
         run: pip install -e .
       - name: Check environment
@@ -245,7 +245,7 @@ jobs:
     timeout-minutes: 60
     runs-on: raspberry-pi
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Activate Virtual Environment
         run: |
           python3.11 -m venv env
