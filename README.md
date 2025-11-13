@@ -19,7 +19,7 @@
 </div>
 <br>
 
-Note: This repository contains the implementation of our manuscript "Enhanced Feature Extraction for Real-Time Fabric Defect Detection in High Aspect Ratio Images" submitted to The Visual Computer. Please cite our work if you use this code.
+Note: This repository contains the implementation of our manuscript "Multi-Scale Orthogonal Enhancement for Real-Time Fabric Defect Detection in Extreme Aspect Ratio Images" submitted to The Visual Computer. Please cite our work if you use this code.
 
 
 [Ultralytics](https://ultralytics.com) [YOLOv8](https://github.com/ultralytics/ultralytics) is a cutting-edge, state-of-the-art (SOTA) model that builds upon the success of previous YOLO versions and introduces new features and improvements to further boost performance and flexibility. YOLOv8 is designed to be fast, accurate, and easy to use, making it an excellent choice for a wide range of object detection and tracking, instance segmentation, image classification and pose estimation tasks.
