@@ -21,6 +21,26 @@
 
 Note: This repository contains the implementation of our manuscript "Multi-Scale Orthogonal Enhancement for Real-Time Fabric Defect Detection in Extreme Aspect Ratio Images" submitted to The Visual Computer. Please cite our work if you use this code.
 
+## Reproducibility and Code Availability
+
+We share code and artifacts to make results reproducible. The abstract already references the GitHub repository; this section documents what is available and how to reproduce the tables.
+
+**Repository contents (to be completed before submission/revision):**
+- [ ] Source code (this repository)
+- [ ] Trained weights and model checkpoints (via GitHub Releases)
+- [ ] Environment specification (requirements file and/or exported environment file)
+- [ ] Inference scripts with command-line examples
+- [ ] Training configuration files and hyperparameters
+- [ ] Dataset preparation instructions
+- [ ] Sample images and annotation format description
+- [ ] Scripts to reproduce all tables and figures in the paper
+
+**Data availability:**
+If the full dataset cannot be released due to industrial confidentiality, we will release a representative subset and/or synthetic examples, together with the annotation schema, data statistics, and clear instructions for requesting access to the full dataset.
+
+**Reproducibility:**
+The Methods or Code Availability section of the manuscript will provide the complete reproducibility details, including the exact commands to reproduce the reported results.
+
 
 [Ultralytics](https://ultralytics.com) [YOLOv8](https://github.com/ultralytics/ultralytics) is a cutting-edge, state-of-the-art (SOTA) model that builds upon the success of previous YOLO versions and introduces new features and improvements to further boost performance and flexibility. YOLOv8 is designed to be fast, accurate, and easy to use, making it an excellent choice for a wide range of object detection and tracking, instance segmentation, image classification and pose estimation tasks.
 
